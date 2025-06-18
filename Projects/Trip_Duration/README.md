@@ -1,6 +1,6 @@
 # Trip Duration Prediction
 
-<img src='https://storage.googleapis.com/kaggle-media/competitions/kaggle/3333/media/taxi_meter.png' width=400>
+<img src='https://storage.googleapis.com/kaggle-media/competitions/kaggle/3333/media/taxi_meter.png' width=400 style="display: block; margin: auto;">
 
 ## Definition from kaggle
 #### In this competition, Kaggle is challenging you to build a model that predicts the total ride duration of taxi trips in New York City. Your primary dataset is one released by the NYC Taxi and Limousine Commission, which includes pickup time, geo-coordinates, number of passengers, and several other variables. 
