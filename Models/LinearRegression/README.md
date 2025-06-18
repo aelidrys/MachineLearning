@@ -54,6 +54,6 @@
 
 #### Finally, by following the above steps, we can find the best line that fits our data. This line is defined by its parameters `m` and `c`, and we can use it to predict new values. To make a prediction, we simply provide an input `x`, and compute: `y = mx + c` where `y` is the predicted output.
 
-#### This is just a simple example of the theory behind linear regression. For the implementation, you can check [here](42ft_linear_reg/Document.md)
+#### This is just a simple example of the theory behind linear regression. For the implementation, you can check [here](42ft_linear_reg/README.md)
 
 

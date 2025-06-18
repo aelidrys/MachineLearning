@@ -1,4 +1,7 @@
 # House Price Prediction
+
+<img src='https://www.propertyreporter.co.uk/images/660x350/16402-shutterstock_538341163.jpg' width=500>
+
 ###  machine learning project based on kaggle dataset
 
 ### [kaggle EDA & Model](https://www.kaggle.com/code/ayoubedark78/housepriceprediction)
