@@ -19,7 +19,7 @@ parcer.add_argument('--train', type=int, default=0,
 parcer.add_argument('--degree', type=int, default=4)
 parcer.add_argument('--alpha', type=int, default=1)
 args = parcer.parse_args()
-train = args.train
+train = 0 # training is done no need to train again
 alpha = args.alpha
 degree_ = args.degree
 
@@ -69,6 +69,27 @@ def training(df, val_df, degree_):
 
 if train:
     training(df, val_df, degree_)
+else:
+    # Load the model
+    with open('model.pkl', 'rb') as f:
+        model = pickle.load(f)
+    
+    # Predict on validation set
+    X_train = np.array(df.drop(columns='trip_duration'))
+    Scaler = MinMaxScaler().fit(X_train)
+    X_val = np.array(val_df.drop(columns='trip_duration'))
+    X_val = Scaler.transform(X_val)
+    X_val = PolynomialFeatures(degree=degree_).fit_transform(X_val)
+    
+    Y_val = np.array(val_df['trip_duration'])
+    
+    predictions = model.predict(X_val)
+    
+    print('----------Val Predictions---------')
+    print('\tScore: ', model.score(X_val, Y_val))
+    # print('\tPredictions: ', predictions[:5])
+    # print('\tActual Values: ', Y_val[:5])    
+
 
 
 
