@@ -35,5 +35,5 @@
 
 ---
 ## Performence
-### train R2_score: 70.15%
-### val R2_score: 70.24%
+### train R2_score: 68.81%
+### val R2_score: 68.81%

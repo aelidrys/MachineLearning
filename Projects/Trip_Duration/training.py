@@ -17,7 +17,7 @@ parcer = argparse.ArgumentParser(description='ArgumentParser')
 parcer.add_argument('--train', type=int, default=0,
                     help='0: no Train, 1: Train')
 parcer.add_argument('--degree', type=int, default=4)
-parcer.add_argument('--alpha', type=int, default=1)
+parcer.add_argument('--alpha', type=int, default=100)
 args = parcer.parse_args()
 train = 0 # training is done no need to train again
 alpha = args.alpha
