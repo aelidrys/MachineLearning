@@ -1,5 +1,8 @@
 # Trip Duration Prediction
 
+
+## [my sulotion in Kaggle](https://www.kaggle.com/code/ayoubedark78/tripdurationprediction)
+
 <img src='https://storage.googleapis.com/kaggle-media/competitions/kaggle/3333/media/taxi_meter.png' width=400 style="display: block; margin: auto;">
 
 ## Definition from kaggle
