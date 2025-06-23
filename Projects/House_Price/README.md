@@ -17,24 +17,25 @@
     - #### using inter quater algorithm
 
 - ### Encoding Data
-    - #### enicoding data by using LabelEncoder
+    - #### encoding categorical data by using LabelEncoder
 
 - ### Featurs Selection
     - #### Select Features based on correlation with SalePrice
 
 
 - ### Trainig
-
     - #### Train Test Split
-
-
     - #### Scaling
-
-
+    - #### generate other features using `PolynomialFeatures`
     - #### Fitint Model
 
 
 - ### Testing
+
+---
+## performance
+- #### train score : 92.03%
+- #### test score : 89.81%
 
 
 

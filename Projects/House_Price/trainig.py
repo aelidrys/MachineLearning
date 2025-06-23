@@ -24,7 +24,6 @@ randomState = args.randomState
 # Load Data from csv files
 df = pd.read_csv('data/HPrice_train.csv')
 df = df.drop(columns=['Id'], axis=1)  # Drop Id column from training data
-target = pd.read_csv('data/HPrice_target.csv')
 
 
 # Preprocessing Data
@@ -61,6 +60,12 @@ print(f'\tscore: {model.score(X_train, y_train)}')
 # Validation
 print("\n\nValidation Dataset")
 print(f'\tscore: {model.score(X_val, y_val)}')
+
+# # save model as pickle
+# import pickle
+# with open('model.pkl', 'wb') as file:
+#     pickle.dump(model, file)
+    
 
 
 
