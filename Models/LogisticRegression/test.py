@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from sklearn import linear_model
+from model import LogisticRegression
 
 threshold = 0.6
 
@@ -9,7 +9,7 @@ def case1_linear():
     y = np.array([0, 0, 0, 1, 1, 1])
 
 
-    model = linear_model.LinearRegression()
+    model = LogisticRegression()
     model.fit(X, y)
     y_pred = model.predict(X)
 
@@ -32,33 +32,33 @@ def case1_linear():
     plt.show()
 
 
-def case2_linear():
-    X = np.array([4, 5, 6, 7, 8, 9, 50]).reshape((-1, 1))
-    y = np.array([0, 0, 0, 1, 1, 1, 1])
+# def case2_linear():
+#     X = np.array([4, 5, 6, 7, 8, 9, 50]).reshape((-1, 1))
+#     y = np.array([0, 0, 0, 1, 1, 1, 1])
 
 
-    model = linear_model.LinearRegression()
-    model.fit(X, y)
-    y_pred = model.predict(X)
+#     model = linear_model.LinearRegression()
+#     model.fit(X, y)
+#     y_pred = model.predict(X)
 
-    classes = (y_pred >= threshold).astype(int)
-    print('ground', y)
-    print('predct', classes)
-    print(f'{np.count_nonzero(classes == y)} out of {y.size}')
+#     classes = (y_pred >= threshold).astype(int)
+#     print('ground', y)
+#     print('predct', classes)
+#     print(f'{np.count_nonzero(classes == y)} out of {y.size}')
 
-    plt.plot(X[:3], y[:3], 'o', color='b', label="Cat")
-    plt.plot(X[3:], y[3:], '^', color='r', label="Dog")
+#     plt.plot(X[:3], y[:3], 'o', color='b', label="Cat")
+#     plt.plot(X[3:], y[3:], '^', color='r', label="Dog")
 
-    plt.scatter(X, y, color="black")
-    plt.plot(X, y_pred, color="blue", linewidth=3)
-    plt.xlabel('x')
-    plt.ylabel('y')
+#     plt.scatter(X, y, color="black")
+#     plt.plot(X, y_pred, color="blue", linewidth=3)
+#     plt.xlabel('x')
+#     plt.ylabel('y')
 
-    plt.plot([0, 50], [threshold, threshold], color="red", linewidth=3)
-    plt.legend(loc="upper left")
-    plt.grid()
+#     plt.plot([0, 50], [threshold, threshold], color="red", linewidth=3)
+#     plt.legend(loc="upper left")
+#     plt.grid()
 
-    plt.show()
+#     plt.show()
 
 
 
