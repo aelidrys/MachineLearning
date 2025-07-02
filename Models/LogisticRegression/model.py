@@ -12,8 +12,8 @@ class LogisticRegression():
         cost = error.T @ (error) / (2 * n)
         return cost[0,0]
     
-    def predict(self,X,W):
-        predict = np.dot(X,W)
+    def predict(self,X):
+        predict = np.dot(X,self.W)
         predict = 1/(1 + np.exp(-predict))
         return predict
     
@@ -40,4 +40,5 @@ class LogisticRegression():
             curr_p = curr_p - gr * _step_size
             lrn_list.append(curr_p)
             iter += 11
+        self.W = curr_p
         return curr_p ,iter, lrn_list
