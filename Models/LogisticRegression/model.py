@@ -4,6 +4,9 @@ from numpy.linalg import norm
 
 class LogisticRegression():
     
+    def sigmoid(self, x):
+        return 1 / (1 + np.exp(-x))
+    
     def cost(self, X, Y, W):
         n = X.shape[0] # number of rows
         
@@ -14,14 +17,15 @@ class LogisticRegression():
     
     def predict(self,X):
         predict = np.dot(X,self.W)
-        predict = 1/(1 + np.exp(-predict))
+        predict = self.sigmoid(predict)
         return predict
     
     def cost_drive(self, X, Y, W):
         n = X.shape[0] # number of rows
         
         predict = np.dot(X,W)
-        error = predict - Y
+        prop = self.sigmoid(predict)
+        error = prop - Y
         grad = X.T @ error / n
         return grad
     
@@ -31,7 +35,6 @@ class LogisticRegression():
         last_p = curr_p + 100
         lrn_list = [curr_p]
         
-        # print(f"cost befor learning: {self.cost(x,t,curr_p)}\n")
         
         iter = 0
         while norm(curr_p - last_p) > _precision and iter < _max_iter:
@@ -40,5 +43,5 @@ class LogisticRegression():
             curr_p = curr_p - gr * _step_size
             lrn_list.append(curr_p)
             iter += 11
-        self.W = curr_p
+        self.W = curr_p.copy()
         return curr_p ,iter, lrn_list
