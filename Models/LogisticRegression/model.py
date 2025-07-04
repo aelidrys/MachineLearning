@@ -10,15 +10,15 @@ class LogisticRegression():
     def cost(self, X, Y, W):
         n = X.shape[0] # number of rows
         
-        predict = X.dot(W)
-        error = predict - Y
-        cost = error.T @ (error) / (2 * n)
-        return cost[0,0]
+        prop = self.sigmoid(X.dot(W))
+        error = -Y * np.log(prop) - (1-Y) * np.log(1-prop)
+        cost = np.sum(error) / n
+        return cost
     
     def predict(self,X):
         predict = np.dot(X,self.W)
-        predict = self.sigmoid(predict)
-        return predict
+        prop = self.sigmoid(predict)
+        return prop
     
     def cost_drive(self, X, Y, W):
         n = X.shape[0] # number of rows
@@ -30,7 +30,6 @@ class LogisticRegression():
         return grad
     
     def fit(self, X, t, _step_size=0.01, _precision=0.0001, _max_iter=1000):
-        # curr_p = np.array([1,1,1,1]).reshape(-1,1)
         curr_p = np.random.rand(X.shape[1]).reshape(-1,1)
         last_p = curr_p + 100
         lrn_list = [curr_p]
@@ -44,4 +43,4 @@ class LogisticRegression():
             lrn_list.append(curr_p)
             iter += 11
         self.W = curr_p.copy()
-        return curr_p ,iter, lrn_list
+        return curr_p

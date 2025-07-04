@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_breast_cancer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report
-from hW1_train import data_preparation
+from HWork1 import data_preparation
 from argparse import ArgumentParser
 
 parser = ArgumentParser()

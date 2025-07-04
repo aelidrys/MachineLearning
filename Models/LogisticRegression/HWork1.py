@@ -8,8 +8,10 @@ from sklearn.metrics import accuracy_score, classification_report
 from argparse import ArgumentParser
 
 parser = ArgumentParser()
+parser.add_argument('--model', type=int, default=1, help='1 for local, 2 for sklearn model')
 parser.add_argument('--random_state', type=int, default=42)
 args = parser.parse_args()
+_model = args.model
 _random_state = args.random_state
 
 
@@ -25,6 +27,7 @@ def data_preparation(add_intercept=True, random_state=42):
         stratify=t ,random_state=random_state)
     
     return X_train, X_test, y_train, y_test
+
 
 def logistic():
     X_train, X_test, y_train, y_test = data_preparation(random_state=_random_state)
@@ -50,8 +53,30 @@ def logistic():
     # print(f'Test classification_report: {classification_report(y_test, p_test_classes)}')
 
 
+def sk_logistic():
+    X_train, X_test, y_train, y_test = data_preparation(random_state=_random_state)
+    model = LogisticRegression(solver='lbfgs')
+    model.fit(X_train, y_train)
+
+    y_pred_train = model.predict(X_train)
+    y_pred_test = model.predict(X_test)
+    y_pred_test_prop = model.predict_proba(X_test)[:, 1]
+
+    accuracy_train = accuracy_score(y_train, y_pred_train)
+    accuracy_test = accuracy_score(y_test, y_pred_test)
+
+    print('Training accuracy: %.4f' % accuracy_train)
+    print('Test accuracy:     %.4f' % accuracy_test)
+
+    report_train = classification_report(y_train, y_pred_train)
+    report_test = classification_report(y_test, y_pred_test)
+    # print('Training\n%s' % report_train)
+    # print('Testing\n%s' % report_test)
 
 
 
 if __name__ == '__main__':
-    logistic()
+    if _model == 1:
+        logistic()
+    if _model == 2:
+        sk_logistic()
