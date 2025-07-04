@@ -14,3 +14,5 @@
 - #### Graph Theory
   - <img src="imgs/graph_threory.png" width=400>
 
+- #### lets represent the Linear Regresion as graph
+  - <img src="imgs/LR_graph.png" width=400>

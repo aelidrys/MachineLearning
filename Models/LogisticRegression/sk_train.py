@@ -23,8 +23,7 @@ def load_breast_cancer_scaled():
     X = MinMaxScaler().fit_transform(X)
 
     X_train, X_test, y_train, y_test = train_test_split(X, t, test_size=0.3,
-                                                        shuffle=True, stratify=t,
-                                                        random_state=0)
+        shuffle=True, stratify=t, random_state=0)
     return X_train, X_test, y_train, y_test
 
 
