@@ -47,6 +47,7 @@
 
 <img src="imgs/nn2.png" width=1000>
 
+
 ### Neural Networks Layers and Neurons
 #### A neural network consists of a set of layers, and each layer contains a number of neurons.
 
