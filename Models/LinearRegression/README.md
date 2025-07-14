@@ -94,18 +94,74 @@
 
 <img src="img/cost_curve.png" width="600">
 
+#### Since the cost function is convex, there is a point in the middle that yields the minimum `error`.
+#### The goal of our linear regression model is to find this point, where the `cost` is optimal.
+
 #### Once again, we require an approach that enables the program to find the minimum `cost` effectively.
 
-#### We are dealing with a convex function and aim to find its minimum, which we can do using the derivative. From any point on the curve, we can move toward the minimum by following the gradient. To do this, we initialize the slope `m` with a random value, compute the derivative of the error function, and update `m` using the following rule: 
-- #### `new_m = m - (gradient * learning_rate)`
-- #### `gradient = d(error)/dm`
+#### Let's assume that we will initialize `m` by `m = 0.5`. What should we do to reach the minimum, increase or decrease `m`?
 
-<img src="img/error_curve.png" width="600">
+<img src="img/L_to_minimum0.png" width="800">
 
+#### You can try to answer about this question.
 
-#### We repeat this process until the derivarive of the `error` ` d(error)/dm` becomes very small or equal to zero we have `new_m=m-(d(error)/dm*learning_rate)` => `new_m ≈ m` because `(d(error)/dm*learning_rate)` is equal or close to zero. The learning rate is a parameter that controls how large each update step is.
+#### It's simple we should increase `m` to reach the optimat point `m ≈ 0.72`
 
-#### Finally, by following the above steps, we can find the best line that fits our data. This line is defined by its parameters `m` and `c`, and we can use it to predict new values. To make a prediction, we simply provide an input `x`, and compute: `y = mx + c` where `y` is the predicted output.
+#### Now let's assume that we will initialize `m` by `m = 0.95`, what should we do this time?
+<img src="img/R_to_minimum0.png" width="800">
+
+#### We should decrease `m` to move toward the optimal point `m ≈ 0.72`
+
+#### So how we can know whethr we need to increase or decrease `m`?
+
+#### This is where the derivative helps.
+
+#### We take the derivative of the cost function with respect to`m`, because we are keeping `c` constant, which is:
+#### The cost is:  `cost = ((m*x+c)-y)²`
+
+#### Taking the derivative with respect to m: `d(cost)/dm = 2 ((m*x+c)-y) * x` 
+
+#### If we start from the left (e.g., `m = 0.5`), the derivative is negative because the curve is going down.
+
+<img src="img/L_to_minimum.png" width="800">
+
+#### Since we want to increase `m`, we use the update rule `new_m = m - grd`, where grd represents the derivative.
+
+#### If `grd = -0.1`, then:
+#### `new_m = 0.5 - (-0.1)`
+#### `new_m = 0.6`
+
+#### The derivative remains negative as long as we are to the left of the minimum.
+
+#### So, by repeatedly applying the rule `new_m = m - grd`, we gradually move toward the value of `m` that gives the optimal error.
+
+<img src="img/grd1.png" width="800">
+
+#### If we take a point from the right of the minimum(e,g, `m = 0.95`), the derivative is positive, because the curve going up.
+<img src="img/R_to_minimum.png" width="800">
+
+#### Now we want to decrease `m`, here also we use the update rule `new_m = m - grd`.
+
+#### If `grd = 0.1`, then:
+#### `new_m = 0.95 - 0.1`
+#### `new_m = 0.85`
+
+#### The derivative remains positive as long as we are to the right of the minimum.
+
+#### So, by repeatedly applying the rule `new_m = m - grd`, we gradually move toward the value of `m` that gives the optimal error.
+
+<img src="img/grd2.png" width="800">
+
+#### Until now, we’ve seen how to move toward the minimum, but how do we know when we've reached it?
+
+#### Sience the derivative in the minimum of the curve is very small or equal to zero.
+
+#### So we repeat this process until the derivative is close to zero.
+#### `grd ≈ 0` 
+#### `new_m = m - grd`
+#### `new_m ≈ m`
+
+#### Finally, by following the above steps, we can find the best line that fits our data. This line is defined by its parameters `m` and `c`, and we can use it to predict new values. To make a prediction, we simply provide an input `x`, and compute: `y = m*x + c` where `y` is the predicted output.
 
 ### Normal Equation
 - #### not complete 
