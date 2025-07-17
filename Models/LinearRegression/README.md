@@ -163,6 +163,15 @@
 
 #### Finally, by following the above steps, we can find the best line that fits our data. This line is defined by its parameters `m` and `c`, and we can use it to predict new values. To make a prediction, we simply provide an input `x`, and compute: `y = m*x + c` where `y` is the predicted output.
 
+#### Now that we have covered linear regression with one feature `x`, what about using two or more features? The linear regression model still works in this case, we just need to make a few small adjustments to the equation.
+
+#### Let's take a example of two features `x1`, `x2`.
+#### The equation will be `y= m1*x1 + m2*x2 + c*1`
+#### We can represent `m1` & `m2` & `c` by a vector of wights `W = {m0, m1, m2}` where `m0 = c`, `x1` & `x2` & `1` by `X = {x0, x1, x2}` where `x0=1`
+#### The equation will be `y = W * X` = `x0*m0 + x1*m1 + x2*m2`
+
+#### For n features `y = W * X` = `x0*m0 + x1*m1 + ... + xn*mn`
+
 ### Normal Equation
 - #### not complete 
 
