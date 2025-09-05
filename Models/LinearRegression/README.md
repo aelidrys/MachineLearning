@@ -18,7 +18,7 @@
 #### The goal of linear regression is to learn the relationship between the input variable `house_size` and the output variable `house_price`, in order to predict the `house_price` of new houses based on their `house_size`.
 
 #### For example if we have two examples:
-- #### in the first the example `house_size = 4` and the `house_price = 2`.
+- #### in the first example the `house_size = 4` and the `house_price = 2`.
 - ####  in the second the example `house_size = 8` and the `house_price = 4`
 #### We observe that the `house_price = house_size / 2` in this two previous examples. So, if we have a new example with `house_size = 6` we can predict that the `house_price = 3`
 
@@ -173,9 +173,10 @@
 #### For n features `y = W * X` = `x0*m0 + x1*m1 + ... + xn*mn`
 
 ### Normal Equation
-- #### not complete 
+
+- #### not complete
 
 ---
-#### This is just a simple example of the theory behind linear regression. For the implementation, you can check [here](42ft_linear_reg/README.md)
+#### This is a simple explanation of the theory behind linear regression. For the implementation, you can check [here](../../Projects/42ft_linear_reg/README.md)
 
 

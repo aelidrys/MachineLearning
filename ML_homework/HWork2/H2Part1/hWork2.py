@@ -9,6 +9,7 @@ df = pd.read_csv(file_name)
 # print(df.info())
 
 
+
 X = df.drop(columns=['Target']).to_numpy()
 T = df['Target'].to_numpy().reshape(-1,1)
 

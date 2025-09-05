@@ -89,7 +89,7 @@ using a linear function train with a gradient descent algorithm.</h3>
           self.max_itr = max_itr # max iterations
           self.W1 = W1 # weights
       ```
-      ##### weights in this case is a matrix of n row and two column m and c in real word we have many features so we have `m1, m2, m3, ...` not just `m, c`
+    ##### weights in this case is a matrix of n row and two column m and c in real word we have many features so we have `m1, m2, m3, ...` not just `m, c`
     - #### create a cost function (also known as error  or loss function) defined by `error = 1/2n Σ((m*x+c)-y_r)^2` To implement this in Python, we use the numpy library, which provides efficient matrix operations.
       ```python
       def cost_f(self, X, Y, W):
@@ -164,7 +164,7 @@ using a linear function train with a gradient descent algorithm.</h3>
         return 1 - u / v
       ```
 ---
-- ### Visualizing to see if our model undestand the data or not</h4>
+- ### Visualizing to see if our model understand the data or not</h4>
 
   - #### use matplotlib.pyplot library to show the actual points and our model prediction</h5>
 
