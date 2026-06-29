@@ -31,13 +31,14 @@ class LinearReg():
         
         # print(f"cost befor learning: {self.cost(x,t,curr_p)}\n")
         
+        costs = [self.cost(X, t, curr_p)]
         iter = 0
         while norm(curr_p - last_p) > _precision and iter < _max_iter:
             last_p = curr_p.copy()
             gr =  self.cost_drive(X,t,curr_p)
             curr_p = curr_p - gr * _step_size
+            costs.append(self.cost(X, t, curr_p))
             lrn_list.append(curr_p)
-            iter += 11
-        return curr_p ,iter, lrn_list
+        return curr_p ,costs, lrn_list
     
 

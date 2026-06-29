@@ -14,13 +14,13 @@ def display_points(X, Y, xlabel='X', ylabel='Y'):
 
 
 
-def costs_VS_iters(costs, iters):
+def costs_VS_iters(costs, iters, color='b'):
     plt.figure(figsize=(10, 5))
-    xItr = np.arange(iters+1)
-    plt.plot(xItr, costs, marker='o', linestyle='-', color='b', label="House Size")
-    plt.xlabel("House ID")
-    plt.ylabel("Size (sq ft)")
-    plt.title("House Sizes by ID")
+    xItr = np.arange(iters)
+    plt.plot(xItr, costs, marker='o', linestyle='-', color=color, label="House Size")
+    plt.xlabel("iterations")
+    plt.ylabel("cost")
+    plt.title("Cost Vs Iterations")
     plt.legend()
     plt.grid(True)
     plt.show()

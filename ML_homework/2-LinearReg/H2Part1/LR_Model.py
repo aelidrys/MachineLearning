@@ -7,6 +7,7 @@ from linear_regression import LinearReg
 from visualization import display_points, costs_VS_iters, featurs_Vs_target
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn.metrics import r2_score
 from Norml_Equation import normal_equations_solution
 
 import warnings
@@ -15,16 +16,18 @@ warnings.filterwarnings('ignore')
 # Create the parser
 parser = argparse.ArgumentParser(description="A simple argument parser example")
 
-parser.add_argument('--dataset', type=str, default='hWork2.csv')
+parser.add_argument('--dataset', type=str, default='dataset_200x4_regression.csv')
 
 parser.add_argument('--preprocessing', type=int, default=1, #P4
-    help='0 for no processing, 1 for min/max, 2 for standrizing')
+                help='0 for no processing,'
+                     '1 for min/max,'
+                     '2 for standrizing')
 
 parser.add_argument('--choice', type=int, default=2,
-    help="0 for linerar verification" #P0
-         "1 for training wih all featurs" #P1 / P3 / P7
-         "2 for training with the best featurs" #P5
-         "3 for normal equation" #p6
+    help="0 for linerar verification"            #P0
+         "1 for training wih all featurs"        #P1 / P3 / P7
+         "2 for training with the best featurs"  #P5
+         "3 for normal equation"                 #p6
          "4 for sikit")
 
 parser.add_argument('--step_size', type=float, default=0.01,help="Learning Rate default(0.01)")
@@ -64,7 +67,7 @@ if choice == 0:
 
 
 
-df = pd.read_csv("/home/ayelidry/Desktop/ML/ML_homework/HWork2/dataset_200x4_regression.csv")
+df = pd.read_csv("./dataset_200x4_regression.csv")
 x = np.array(df[['Feat1', 'Feat2', 'Feat3']])
 
 if preprocessing == 1:
@@ -80,7 +83,11 @@ x = np.hstack([ones,x])
 t = np.array(df[['Target']])
 
 if choice == 1: # Trian with All Featurs
-    wights , iter, wights_list = LR.gradient_descent(x,t,step_size,precision)
+    wights , costs, wights_list = LR.gradient_descent(x,t,step_size,precision,max_iter)
+    p = LR.predict(x, wights)
+    print(f"r2_score: {r2_score(t,p):.2f}")
+    iters = len(costs)
+    costs_VS_iters(costs, iters)
     print(f"wights: {wights[:,0]}")
 
 
@@ -90,7 +97,11 @@ if choice == 2: # Trian with Best Featurs
     df3 = df[['Feat3', 'Target']]
     featurs_Vs_target(df1,df2,df3)
     x1 = x[:,:2]
-    wights , iter, wights_list = LR.gradient_descent(x1,t,step_size,precision)
+    wights , costs, wights_list = LR.gradient_descent(x1,t,step_size,precision,max_iter)
+    p = LR.predict(x1, wights)
+    print(f"r2_score: {r2_score(t,p):.2f}")
+    iters = len(costs)
+    costs_VS_iters(costs, iters, 'r')
     print(f"wights: {wights[:,0]}")
     
 
@@ -103,45 +114,45 @@ if choice == 4: # Normal Equation
     LReg = LinearRegression(fit_intercept=False).fit(x,t)
     wights = LReg.coef_
     print(f"wights: {wights}")
-    
 
 
 
 
-# # HYPERPARAMETERS TUNING   
-# step_sizes = np.array([0.1, 0.01, 0.001, 0.0001, 0.00001, 0.0000001])
-# precisions = np.array([0.01, 0.001, 0.0001, 0.00001])
-# parms = []
-# itr = 0
-# for lr in step_sizes:
-#     for prec in precisions:
-#         wights , iter, wights_list = LR.gradient_descent(x,t,lr,prec)
-#         parms.append([wights, iter,lr,prec, wights_list])
-#         itr += 1
 
-# cost = LR.cost(x,t,parms[0][0])
-# # print("parms", parms[0][0])
-# parm = None
-# iterations = 0
-# w_list = None
-# for prm in parms:
-#     print("cost: ", LR.cost(x,t,prm[0]))
-#     if LR.cost(x,t,prm[0]) < cost:
-#         cost = LR.cost(x,t,prm[0])
-#         parm = prm
-#     if prm[1] > 10 and prm[1] < 1000:
-#         iterations = prm[1]
-#         w_list = prm[4]
+# HYPERPARAMETERS TUNING   
+if choice == 0:
+    step_sizes = np.array([0.1, 0.01, 0.001, 0.0001, 0.00001, 0.0000001])
+    precisions = np.array([0.01, 0.001, 0.0001, 0.00001])
+    parms = []
+    itr = 0
+    for lr in step_sizes:
+        for prec in precisions:
+            wights , costs, wights_list = LR.gradient_descent(x,t,lr,prec)
+            parms.append([wights, iter,lr,prec, wights_list])
+            itr += 1
+    cost = LR.cost(x,t,parms[0][0])
+    # print("parms", parms[0][0])
+    parm = None
+    iterations = 0
+    w_list = None
+    for prm in parms:
+        print("cost: ", LR.cost(x,t,prm[0]))
+        if LR.cost(x,t,prm[0]) < cost:
+            cost = LR.cost(x,t,prm[0])
+            parm = prm
+        if prm[1] > 10 and prm[1] < 1000:
+            iterations = prm[1]
+            w_list = prm[4]
 
-# print(f"step_size = {prm[2]:.10f}".rstrip("0").rstrip("."))
-# print(f"precision = {prm[3]:.10f}".rstrip("0").rstrip("."))
-# print(f"minimum cost = {cost} | iterations = {prm[1]}")
+    print(f"step_size = {prm[2]:.10f}".rstrip("0").rstrip("."))
+    print(f"precision = {prm[3]:.10f}".rstrip("0").rstrip("."))
+    print(f"minimum cost = {cost} | iterations = {prm[1]}")
 
-# # COST VISUALISATION
-# costs = []
-# for w in w_list:
-#     costs.append(LR.cost(x,t,w))
-# costs_VS_iters(costs, iterations)
+    # COST VISUALISATION
+    costs = []
+    for w in w_list:
+        costs.append(LR.cost(x,t,w))
+    costs_VS_iters(costs, iterations)
 
 
 
