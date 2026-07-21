@@ -65,5 +65,6 @@
 ## Content
 - [x] **introduction to Neural Netwirk**
 - [x] **Neural Network structer**
-- [ ] **practice examlple (feed forword)**
-- [ ] **Backpropagation**
+- [ ] **practice examlple**
+  - [ ] **feed forword**
+  - [ ] **Backpropagation**
