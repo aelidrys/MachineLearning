@@ -8,7 +8,7 @@ from imblearn.under_sampling import RandomUnderSampler
 
 
 
-def load_data(file_path):
+def load_data(file_path) -> pd.DataFrame:
     try:
         data = pd.read_csv(file_path)
         return data
@@ -30,53 +30,73 @@ def inter_quartile_range_treatment(data, columns_to_treat):
     return data
 
 
-# Z-score treatment
-def z_score_treatment(data, columns_to_treat):
-    for column_name in columns_to_treat:
-        mean = data[column_name].mean()
-        std_dev = data[column_name].std()
-        z_scores = (data[column_name] - mean) / std_dev
-        data[column_name] = np.where(z_scores < -3, mean - 3 * std_dev, data[column_name])
-        data[column_name] = np.where(z_scores > 3, mean + 3 * std_dev, data[column_name])
-    return data
-
-
 # Outliers treatment
 def treat_outliers(data):
     columns_to_treat = [col for col in data.columns if col != 'Class']
     try:
         data = inter_quartile_range_treatment(data, columns_to_treat)
-        # data = z_score_treatment(data, columns_to_treat)
         return data
     except Exception as e:
         print(f"Error treating outliers: {e}")
         raise
-    
-    
-def features_selection(data):
-    columns_to_drop = ['Time', 'V13', 'V15', 'V19', 'V20', 'V21', 'V22', 'V23', 'V24', 'V25', 'V27', 'V28', 'Amount']
-    data = data.drop(columns=columns_to_drop, errors='ignore')
-    return data
 
 
-def preprocess_data(data):
-    data = features_selection(data)
-    X = data.drop(columns=['Class'], errors='ignore')
-    Y = data['Class']
-    return X, Y
+# Determine relevant features using RandomForestClassifier
+def feature_importances(X_train, Y_train):
+    print("Determining relevant features using RandomForestClassifier...")
+    model = RandomForestClassifier()
+    model.fit(X_train, Y_train)
+
+    feature_importances = model.feature_importances_
+    threshold = np.mean(feature_importances)
+    print(f"threshold: {threshold}")
+    selected_features = X_train.columns[feature_importances > threshold]
+    print(f"selected_features: {selected_features}")
+    return selected_features    
 
 
+# Select relevant features based on the provided list of selected features
+def features_selection(X, selected_features=None):
+    if selected_features is None:
+        raise ValueError("selected_features must be provided for feature selection.")
+    X = X[selected_features]
+    return X
+
+
+# Split the data into training and validation sets
 def split_data(X, Y):
     X_train, X_val, Y_train, Y_val = train_test_split(X, Y, test_size=0.2, random_state=42) 
     return X_train, X_val, Y_train, Y_val
 
 
+# Preprocess the data by treating outliers, splitting data, and selecting relevant features
+def preprocess_data(data):
+    data = treat_outliers(data)
+    X = data.drop(columns=['Class'], errors='ignore')
+    Y = data['Class']
+    X_train, X_val, Y_train, Y_val = split_data(X, Y)
+
+    # selected_features = feature_importances(X_train, Y_train)
+    selected_features = ['V7', 'V10', 'V11', 'V12', 'V14', 'V16', 'V17', 'V18']
+    X_train = features_selection(X_train, selected_features)
+    X_val = features_selection(X_val, selected_features)
+    return X_train, X_val, Y_train, Y_val
+
+
+# Preprocess the test data by treating outliers and selecting relevant features
+def preprocess_test_data(data):
+    data = treat_outliers(data)
+    X = data.drop(columns=['Class'], errors='ignore')
+    Y = data['Class']
+    selected_features = ['V7', 'V10', 'V11', 'V12', 'V14', 'V16', 'V17', 'V18']
+    X = features_selection(X, selected_features)
+    return X, Y
 
 
 # SMOTE oversampling
 def oversample_data(X, Y, random_state=42):
     counter = Counter(Y)
-    factor, majority_size = 15, counter[0]
+    factor, majority_size = 14, counter[0]
     new_size = int(majority_size / factor)
     print(f"over new_size: {new_size}")
     
@@ -90,7 +110,7 @@ def oversample_data(X, Y, random_state=42):
 # Undesampling data
 def undersample_data(X, Y, random_state=42):
     counter = Counter(Y)
-    factor, minority_size = 10, counter[1]
+    factor, minority_size = 12, counter[1]
     new_size = int(minority_size * factor)
     print(f"under new_size: {new_size}")
     
