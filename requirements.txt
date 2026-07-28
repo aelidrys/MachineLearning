@@ -5,4 +5,7 @@ matplotlib
 plotly
 seaborn
 imbalanced-learn
+xgboost
+catboost
+lightgbm
 # torch

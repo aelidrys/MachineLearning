@@ -13,12 +13,12 @@ def load_data(file_path) -> pd.DataFrame:
         data = pd.read_csv(file_path)
         return data
     except Exception as e:
-        print(f"Error loading data: {e}")
-        raise
+        raise FileNotFoundError(f"Error loading data: {e}")
 
 
 # Inter quartile outliers treatment
 def inter_quartile_range_treatment(data, columns_to_treat):
+    bounds = []
     for column_name in columns_to_treat:
         Q1 = data[column_name].quantile(0.25)
         Q3 = data[column_name].quantile(0.75)
@@ -27,18 +27,24 @@ def inter_quartile_range_treatment(data, columns_to_treat):
         upper_bound = Q3 + 1.5 * IQR
         data[column_name] = np.where(data[column_name] < lower_bound, lower_bound, data[column_name])
         data[column_name] = np.where(data[column_name] > upper_bound, upper_bound, data[column_name])
-    return data
+        bounds.append((lower_bound, upper_bound))
+    return data, bounds
 
 
 # Outliers treatment
-def treat_outliers(data):
+def treat_outliers(data, bounds=[]):
     columns_to_treat = [col for col in data.columns if col != 'Class']
+    if bounds:
+        for i, column_name in enumerate(columns_to_treat):
+            lower_bound, upper_bound = bounds[i]
+            data[column_name] = np.where(data[column_name] < lower_bound, lower_bound, data[column_name])
+            data[column_name] = np.where(data[column_name] > upper_bound, upper_bound, data[column_name])
+        return data, bounds
     try:
-        data = inter_quartile_range_treatment(data, columns_to_treat)
-        return data
+        data, bounds = inter_quartile_range_treatment(data, columns_to_treat)
+        return data, bounds
     except Exception as e:
-        print(f"Error treating outliers: {e}")
-        raise
+        raise ValueError(f"Error treating outliers: {e}")
 
 
 # Determine relevant features using RandomForestClassifier
@@ -71,25 +77,27 @@ def split_data(X, Y):
 
 # Preprocess the data by treating outliers, splitting data, and selecting relevant features
 def preprocess_data(data):
-    data = treat_outliers(data)
+    selected_features = ['V7', 'V10', 'V11', 'V12', 'V14', 'V16', 'V17', 'V18']
+    selected_features.append('Class')
+    data = features_selection(data, selected_features)
+
     X = data.drop(columns=['Class'], errors='ignore')
     Y = data['Class']
     X_train, X_val, Y_train, Y_val = split_data(X, Y)
+    X_train, bounds = treat_outliers(X_train)
+    X_val, _ = treat_outliers(X_val, bounds)
 
-    # selected_features = feature_importances(X_train, Y_train)
-    selected_features = ['V7', 'V10', 'V11', 'V12', 'V14', 'V16', 'V17', 'V18']
-    X_train = features_selection(X_train, selected_features)
-    X_val = features_selection(X_val, selected_features)
-    return X_train, X_val, Y_train, Y_val
+    return X_train, X_val, Y_train, Y_val, bounds
 
 
 # Preprocess the test data by treating outliers and selecting relevant features
-def preprocess_test_data(data):
-    data = treat_outliers(data)
+def preprocess_eval_data(data, bounds=[]):
+    selected_features = ['V7', 'V10', 'V11', 'V12', 'V14', 'V16', 'V17', 'V18']
+    selected_features.append('Class')
+    data = features_selection(data, selected_features)
+    data, bounds = treat_outliers(data, bounds)
     X = data.drop(columns=['Class'], errors='ignore')
     Y = data['Class']
-    selected_features = ['V7', 'V10', 'V11', 'V12', 'V14', 'V16', 'V17', 'V18']
-    X = features_selection(X, selected_features)
     return X, Y
 
 
@@ -129,17 +137,17 @@ def sampling_data(X, Y, random_state=42):
 
 
 # Save the model to a file using pickle
-def save_model(model, file_path, threshold=0.5, model_name='model'):
+def save_model(model, threshold=0.5, model_name='model', bounds=[], file_path='model.pkl'):
 
     try:
         model_dict = {
             'model': model,
             'threshold': threshold,
-            'model_name': model_name
+            'model_name': model_name,
+            'bounds': bounds
         }
         with open(file_path, 'wb') as file:
             pickle.dump(model_dict, file)
         print(f"Model saved to {file_path}")
     except Exception as e:
-        print(f"Error saving model: {e}")
-        raise
+        raise ValueError(f"Error saving model: {e}")
