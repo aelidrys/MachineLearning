@@ -2,8 +2,7 @@ import argparse
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
-from credit_fraud_utils_data import load_data, split_data, preprocess_data, preprocess_eval_data
-from credit_fraud_utils_data import save_model, sampling_data
+from credit_fraud_utils_data import load_data, split_data, preprocess_data, preprocess_eval_data, save_model, sampling_data
 from credit_fraud_utils_eval import evaluate_model
 from sklearn.metrics import precision_recall_curve
 from collections import Counter
@@ -12,6 +11,7 @@ from sklearn.ensemble import VotingClassifier
 from xgboost import XGBClassifier
 from catboost import CatBoostClassifier
 from lightgbm import LGBMClassifier
+from credit_fraud_visualization import pr_curve, precisionVsRecall
 
 
 
@@ -26,7 +26,7 @@ def train_model(X, Y, model_name):
     elif model_name == 'neuralNet':
         model = MLPClassifier(hidden_layer_sizes=(20,), max_iter=5000)
     elif model_name == 'voting':
-        model1 = LogisticRegression()
+        model1 = LogisticRegression(class_weight='balanced')
         model2 = RandomForestClassifier()
         model3 = MLPClassifier(hidden_layer_sizes=(10,), max_iter=5000)
         model = VotingClassifier(estimators=[('logr', model1), ('rf', model2), ('nn', model3)], voting='soft')
@@ -49,6 +49,10 @@ def best_threshold(model, X, Y):
     y_propa =  model.predict_proba(X)[:, 1]
     precesions, recalls, thresholds = precision_recall_curve(Y, y_propa)
     
+
+    # Visualize the precision-recall curve
+    pr_curve(precesions, recalls, thresholds)
+    precisionVsRecall(precesions, recalls)
     f1_scoures = 2 * (precesions * recalls) / (precesions + recalls)
     best_index = np.argmax(f1_scoures)
     best_threshold = thresholds[best_index]
@@ -79,6 +83,9 @@ def main():
 
     # Preprocess the data
     X_train, X_val, Y_train, Y_val, bounds = preprocess_data(data)
+
+    # Sample the training data to handle class imbalance
+    # X_train, Y_train = sampling_data(X_train, Y_train)
 
     # Train the model
     model = train_model(X_train, Y_train, args.model)

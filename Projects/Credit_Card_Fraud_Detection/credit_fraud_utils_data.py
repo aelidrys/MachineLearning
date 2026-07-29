@@ -33,6 +33,7 @@ def inter_quartile_range_treatment(data, columns_to_treat):
 
 # Outliers treatment
 def treat_outliers(data, bounds=[]):
+    data = data.copy()
     columns_to_treat = [col for col in data.columns if col != 'Class']
     if bounds:
         for i, column_name in enumerate(columns_to_treat):
@@ -104,7 +105,7 @@ def preprocess_eval_data(data, bounds=[]):
 # SMOTE oversampling
 def oversample_data(X, Y, random_state=42):
     counter = Counter(Y)
-    factor, majority_size = 14, counter[0]
+    factor, majority_size = 65, counter[0]
     new_size = int(majority_size / factor)
     print(f"over new_size: {new_size}")
     
@@ -118,7 +119,7 @@ def oversample_data(X, Y, random_state=42):
 # Undesampling data
 def undersample_data(X, Y, random_state=42):
     counter = Counter(Y)
-    factor, minority_size = 12, counter[1]
+    factor, minority_size = 40, counter[1]
     new_size = int(minority_size * factor)
     print(f"under new_size: {new_size}")
     
@@ -132,8 +133,8 @@ def undersample_data(X, Y, random_state=42):
 # Oversampling and Undersampling
 def sampling_data(X, Y, random_state=42):
     X, Y = oversample_data(X, Y, random_state)
-    X_s, Y_s = undersample_data(X, Y, random_state)
-    return X_s, Y_s
+    X, Y = undersample_data(X, Y, random_state)
+    return X, Y
 
 
 # Save the model to a file using pickle
