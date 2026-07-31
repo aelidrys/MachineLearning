@@ -105,7 +105,7 @@ def preprocess_eval_data(data, bounds=[]):
 # SMOTE oversampling
 def oversample_data(X, Y, random_state=42):
     counter = Counter(Y)
-    factor, majority_size = 65, counter[0]
+    factor, majority_size = 100, counter[0]
     new_size = int(majority_size / factor)
     print(f"over new_size: {new_size}")
     
@@ -119,7 +119,7 @@ def oversample_data(X, Y, random_state=42):
 # Undesampling data
 def undersample_data(X, Y, random_state=42):
     counter = Counter(Y)
-    factor, minority_size = 40, counter[1]
+    factor, minority_size = 80, counter[1]
     new_size = int(minority_size * factor)
     print(f"under new_size: {new_size}")
     

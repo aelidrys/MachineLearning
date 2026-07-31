@@ -20,6 +20,7 @@ def evaluate_model(model, threshold, X, y, model_name, dataset_name="train"):
     print("\n-------------------------------------------------------------------------------")
     
     print(f"Evaluating the {model_name} model by {dataset_name} dataset")
+    print(f"Threshold: {threshold:.2f}")
     y_proba = model.predict_proba(X)[:, 1]
     y_pred = (y_proba >= threshold).astype(int)
     print("Confusion Matrix:")

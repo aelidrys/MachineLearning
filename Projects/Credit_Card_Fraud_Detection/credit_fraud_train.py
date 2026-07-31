@@ -11,7 +11,7 @@ from xgboost import XGBClassifier
 from catboost import CatBoostClassifier
 from lightgbm import LGBMClassifier
 from sklearn.ensemble import RandomForestClassifier
-from credit_fraud_visualization import pr_curve, precisionVsRecall
+from credit_fraud_visualization import pr_curve
 from FocalLoss import FocalLossLogisticRegression
 
 
@@ -28,15 +28,16 @@ def train_model(X, Y, model_name):
         model = MLPClassifier(hidden_layer_sizes=(20,), max_iter=5000)
     elif model_name == 'voting':
         model1 = LogisticRegression(class_weight='balanced')
-        model2 = RandomForestClassifier()
-        model3 = MLPClassifier(hidden_layer_sizes=(10,), max_iter=5000)
-        model = VotingClassifier(estimators=[('logr', model1), ('rf', model2), ('nn', model3)], voting='soft')
+        model2 = MLPClassifier(hidden_layer_sizes=(10,), max_iter=5000)
+        model3 = XGBClassifier(n_estimators=8, max_depth=20, learning_rate=0.1, objective='binary:logistic')
+        model4 = CatBoostClassifier(iterations=1000, learning_rate=0.01, depth=6, verbose=0)
+        model = VotingClassifier(estimators=[('logr', model1), ('nn', model2), ('xgb', model3), ('cb', model4)], voting='soft')
     elif model_name == 'xgboost':
-        model = XGBClassifier(n_estimators=5, max_depth=25, learning_rate=0.01, objective='binary:logistic')
+        model = XGBClassifier(n_estimators=8, max_depth=30, learning_rate=0.1, objective='binary:logistic')
     elif model_name == 'catboost':
         model = CatBoostClassifier(iterations=1000, learning_rate=0.01, depth=6, verbose=0)
     elif model_name == 'lightgbm':
-        model = LGBMClassifier(n_estimators=5, learning_rate=0.01, max_depth=6, objective='binary')
+        model = LGBMClassifier(n_estimators=10, learning_rate=0.01, max_depth=25, objective='binary')
     elif model_name == 'focalLoss':
         model = FocalLossLogisticRegression(gamma=5, alpha=0.05, max_iter=10000, C=1.0)
     else:
@@ -55,7 +56,6 @@ def best_threshold(model, X, Y):
 
     # Visualize the precision-recall curve
     pr_curve(precesions, recalls, thresholds)
-    precisionVsRecall(precesions, recalls)
     f1_scoures = 2 * (precesions * recalls) / (precesions + recalls)
     best_index = np.argmax(f1_scoures)
     best_threshold = thresholds[best_index]
@@ -67,6 +67,7 @@ def best_threshold(model, X, Y):
 def main():
     parser = argparse.ArgumentParser(description="Credit Card Fraud Detection Training Script")
     parser.add_argument('--data', type=str, default='data/train.csv', help='Path to the training data')
+    parser.add_argument('--sample', type=int, default=0, help='1 to sample the training data or 0 to not sample it')
     parser.add_argument('--model', type=str, default='logisticReg', 
             help='logisticReg to train model using Logistic Regression'
                  'randomForest to train model using Random Forest'
@@ -89,7 +90,8 @@ def main():
     X_train, X_val, Y_train, Y_val, bounds = preprocess_data(data)
 
     # Sample the training data to handle class imbalance
-    # X_train, Y_train = sampling_data(X_train, Y_train)
+    if args.sample == 1:
+        X_train, Y_train = sampling_data(X_train, Y_train)
 
     # Train the model
     model = train_model(X_train, Y_train, args.model)
