@@ -1,17 +1,18 @@
 import argparse
 import numpy as np
-from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier
 from credit_fraud_utils_data import load_data, split_data, preprocess_data, preprocess_eval_data, save_model, sampling_data
 from credit_fraud_utils_eval import evaluate_model
 from sklearn.metrics import precision_recall_curve
 from collections import Counter
+from sklearn.linear_model import LogisticRegression
 from sklearn.neural_network import MLPClassifier
 from sklearn.ensemble import VotingClassifier
 from xgboost import XGBClassifier
 from catboost import CatBoostClassifier
 from lightgbm import LGBMClassifier
+from sklearn.ensemble import RandomForestClassifier
 from credit_fraud_visualization import pr_curve, precisionVsRecall
+from FocalLoss import FocalLossLogisticRegression
 
 
 
@@ -36,6 +37,8 @@ def train_model(X, Y, model_name):
         model = CatBoostClassifier(iterations=1000, learning_rate=0.01, depth=6, verbose=0)
     elif model_name == 'lightgbm':
         model = LGBMClassifier(n_estimators=5, learning_rate=0.01, max_depth=6, objective='binary')
+    elif model_name == 'focalLoss':
+        model = FocalLossLogisticRegression(gamma=5, alpha=0.05, max_iter=10000, C=1.0)
     else:
         raise ValueError(f"Model {model_name} is not supported.")
     
@@ -72,6 +75,7 @@ def main():
                  'xgboost to train model using XGBoost'
                  'catboost to train model using CatBoost'
                  'lightgbm to train model using LightGBM'
+                 'focalLoss to train model using Focal Loss'
                  )
     parser.add_argument('--save_path', type=str, default='model.pkl', help='Path to save the trained model')
     parser.add_argument('--save_model', type=int, default=0, help='1 to save the trained model or 0 to not save it')
