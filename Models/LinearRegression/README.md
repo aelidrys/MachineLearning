@@ -1,4 +1,8 @@
 # Linear Regression
+
+[⬅️ Back to Main ML Portfolio](../../README.md)
+
+---
 ## `I` - what is linear regression?
 #### Linear Regression is a [supervised learning](https://en.wikipedia.org/wiki/Supervised_learning) algorithm in machine learning, which is widely used for solving regression problems. Regression is a type of machine learning problems where the goal is to predict a continuous output variable based on one or more input variables.
 

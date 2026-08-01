@@ -1,7 +1,7 @@
-## Not complete in progress!!!
-# Neural Network
+# Neural Network (Not complete in progress!!!)
+[⬅️ Back to Main ML Portfolio](../../README.md)
 
-
+---
 ## what is neural network?
 #### A neural network is a machine learning program, or model, that makes decisions in a manner similar to the human brain, by using processes that mimic the way biological neurons work together to identify phenomena, weigh options and arrive at conclusions. 
 
@@ -35,11 +35,11 @@
 
 #### Since we do not apply any activation function, the overall transformation remains linear:
 
-#### `O = w5*y1 + w6y2`
+##### $$O = w5*y1 + w6*y2$$
 
-#### `O = w5*(x1*w1+w2*x2+b1) + w6*(x1*w3+w4*x2+b2)`
+##### $$O = w5*(x1*w1+w2*x2+b1) + w6*(x1*w3+w4*x2+b2)$$
 
-#### `O = x1*w1*w5 + x2*w2*w5 + b1*w5 + x1*w3*w6 + x2*w4*w6 + b2*w6`
+##### $$O = x1*w1*w5 + x2*w2*w5 + b1*w5 + x1*w3*w6 + x2*w4*w6 + b2*w6$$
 
 #### For example `x1*w1*w5` it still a linear transformation and we can summarize `w1*w5` in `w` => `x1*w1*w5` = `x1*w` just a single `w` can do the same effect so it still a linear regression model
 
@@ -59,7 +59,7 @@
 
 ---
 ### Feed forword (practice examlple)
-#### Let's assume that the activation function f is the square function, `f(x) = x^2`
+#### Let's assume that the activation function f is the square function, $$f(x) = x^2$$
 
 ---
 ## Content

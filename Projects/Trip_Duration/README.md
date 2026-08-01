@@ -1,7 +1,7 @@
 # 🚕 NYC Taxi Trip Duration Prediction *(Ridge Regression & Geospatial Engineering)*
 ---
 ### [View my complete solution on Kaggle](https://www.kaggle.com/code/ayoubedark78/tripdurationprediction)
-[⬅️ Back to Main ML Portfolio](../README.md)
+[⬅️ Back to Main ML Portfolio](../../README.md)
 
 <p align="center">
   <img src="https://storage.googleapis.com/kaggle-media/competitions/kaggle/3333/media/taxi_meter.png" width="400" alt="Taxi Meter">
