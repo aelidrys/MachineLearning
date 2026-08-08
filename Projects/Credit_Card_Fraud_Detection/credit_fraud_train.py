@@ -23,19 +23,19 @@ def train_model(X, Y, model_name):
     if model_name == 'logisticReg':
         model = LogisticRegression()
     elif model_name == 'randomForest':
-        model = RandomForestClassifier()
+        model = RandomForestClassifier(max_depth=6, n_estimators=50)
     elif model_name == 'neuralNet':
         model = MLPClassifier(hidden_layer_sizes=(20,), max_iter=5000)
     elif model_name == 'voting':
         model1 = LogisticRegression(class_weight='balanced')
         model2 = MLPClassifier(hidden_layer_sizes=(10,), max_iter=5000)
-        model3 = XGBClassifier(n_estimators=8, max_depth=20, learning_rate=0.1, objective='binary:logistic')
+        model3 = XGBClassifier(n_estimators=50, max_depth=25, learning_rate=0.1, objective='binary:logistic')
         model4 = CatBoostClassifier(iterations=1000, learning_rate=0.01, depth=6, verbose=0)
-        model = VotingClassifier(estimators=[('logr', model1), ('nn', model2), ('xgb', model3), ('cb', model4)], voting='soft')
+        model = VotingClassifier(estimators=[('logr', model1), ('nn', model2), ('xgb', model3), ('cb', model4)], voting='soft', weights=[1.5, 1, 1, 1.5])
     elif model_name == 'xgboost':
-        model = XGBClassifier(n_estimators=8, max_depth=30, learning_rate=0.1, objective='binary:logistic')
+        model = XGBClassifier(n_estimators=50, max_depth=25, learning_rate=0.1, objective='binary:logistic')
     elif model_name == 'catboost':
-        model = CatBoostClassifier(iterations=1000, learning_rate=0.01, depth=6, verbose=0)
+        model = CatBoostClassifier(iterations=1000, learning_rate=0.01, depth=8, verbose=0)
     elif model_name == 'lightgbm':
         model = LGBMClassifier(n_estimators=10, learning_rate=0.01, max_depth=25, objective='binary')
     elif model_name == 'focalLoss':
@@ -55,7 +55,7 @@ def best_threshold(model, X, Y):
     
 
     # Visualize the precision-recall curve
-    pr_curve(precesions, recalls, thresholds)
+    # pr_curve(precesions, recalls, thresholds)
     f1_scoures = 2 * (precesions * recalls) / (precesions + recalls)
     best_index = np.argmax(f1_scoures)
     best_threshold = thresholds[best_index]

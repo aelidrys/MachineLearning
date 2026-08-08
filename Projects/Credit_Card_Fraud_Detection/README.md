@@ -1,8 +1,11 @@
 # 💳 Credit Card Fraud Detection *(Logistic Regression, Random Forest, XGBoost, etc.)*
 ---
 ### [Project description on Kaggle](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud/data) 
-
 [⬅️ Back to Main ML Portfolio](../../README.md)
+<p align="center">
+  <img  src="./statics/credit_fraud1.jpg" width="600" alt="creadit fraud Detection">
+</p>
+
 
 ## 📋 Overview
 - **The Business Problem:** It is critical that credit card companies are able to accurately recognize fraudulent transactions so that customers are not charged for items they did not purchase, while minimizing false alarms that block legitimate transactions.
